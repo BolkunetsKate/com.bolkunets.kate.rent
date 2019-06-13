@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+
+    <changeSet id="2019-06-11 16:39:11" author="Katsiaryna Balkunets">
+        <preConditions>
+            <not>
+                <tableExists tableName="users"/>
+            </not>
+        </preConditions>
+        <createTable tableName="users">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_users"/>
+            </column>
+            <column name="username" type="VARCHAR2(64)"/>
+            <column name="password_hash" type="VARCHAR2(64)"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="users"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="2019-06-11 16:41:14" author="Katsiaryna Balkunets">
+        <preConditions>
+            <not>
+                <tableExists tableName="roles"/>
+            </not>
+        </preConditions>
+        <createTable tableName="roles">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_roles"/>
+            </column>
+            <column name="name" type="VARCHAR2(16)"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="roles"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="2019-06-11 16:45:39" author="Katsiaryna Balkunets">
+        <preConditions>
+            <not>
+                <tableExists tableName="users_roles"/>
+            </not>
+        </preConditions>
+        <createTable tableName="users_roles">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_users_roles"/>
+            </column>
+            <column name="user_id" type="BIGINT"/>
+            <column name="role_id" type="BIGINT"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="users_roles"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="2019-06-11 16:47:47" author="Katsiaryna Balkunets">
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists foreignKeyTableName="users_roles" foreignKeyName="fk_user_roles_user_id"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="users_roles" baseColumnNames="user_id"
+                                 constraintName="fk_user_roles_user_id" referencedTableName="users"
+                                 referencedColumnNames="id"/>
+        <rollback>
+            <dropForeignKeyConstraint baseTableName="users_roles" constraintName="fk_user_roles_user_id"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="2019-06-11 16:48:48" author="Katsiaryna Balkunets">
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists foreignKeyTableName="users_roles" foreignKeyName="fk_user_roles_role_id"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="users_roles" baseColumnNames="role_id"
+                                 constraintName="fk_user_roles_role_id" referencedTableName="roles"
+                                 referencedColumnNames="id"/>
+        <rollback>
+            <dropForeignKeyConstraint baseTableName="users_roles" constraintName="fk_user_roles_role_id"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="2019-06-11 16:49:49" author="Katsiaryna Balkunets">
+        <preConditions>
+            <not>
+                <tableExists tableName="personal_data"/>
+            </not>
+        </preConditions>
+        <createTable tableName="personal_data">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_personal_data"/>
+            </column>
+            <column name="first_name" type="VARCHAR2(64)"/>
+            <column name="middle_name" type="VARCHAR2(64)"/>
+            <column name="last_name" type="VARCHAR2(64)"/>
+            <column name="male" type="VARCHAR2(32)"/>
+            <column name="birth_date" type="DATETIME"/>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="personal_data"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="2019-06-11 16:52:52" author="Katsiaryna Balkunets">
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists foreignKeyTableName="personal_data" foreignKeyName="fk_pd_user_id"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="personal_data" baseColumnNames="user_id"
+                                 constraintName="fk_pd_user_id" referencedTableName="users"
+                                 referencedColumnNames="id"/>
+        <rollback>
+            <dropForeignKeyConstraint baseTableName="personal_data" constraintName="fk_pd_user_id"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="2019-06-11 16:55:55" author="Katsiaryna Balkunets">
+        <preConditions>
+            <not>
+                <tableExists tableName="registrations"/>
+            </not>
+        </preConditions>
+        <createTable tableName="registrations">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_registrations"/>
+            </column>
+            <column name="email" type="VARCHAR2(255)"/>
+            <column name="code" type="VARCHAR2(64)"/>
+            <column name="registration_attempts" type="SMALLINT"/>
+            <column name="last_attempt_date" type="DATETIME"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="registrations"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="2019-06-11 16:58:58" author="Katsiaryna Balkunets">
+        <preConditions>
+            <not>
+                <tableExists tableName="phones"/>
+            </not>
+        </preConditions>
+        <createTable tableName="phones">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_phones"/>
+            </column>
+            <column name="country_code" type="VARCHAR2(4)"/>
+            <column name="phone" type="VARCHAR2(16)"/>
+            <column name="is_primary" type="BOOLEAN"/>
+            <column name="personal_data_id" type="BIGINT"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="phones"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="2019-06-11 17:02:02" author="Katsiaryna Balkunets">
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists foreignKeyTableName="phones" foreignKeyName="fk_phones_pd_id"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="phones" baseColumnNames="personal_data_id"
+                                 constraintName="fk_phones_pd_id" referencedTableName="personal_data"
+                                 referencedColumnNames="id"/>
+        <rollback>
+            <dropForeignKeyConstraint baseTableName="phones" constraintName="fk_phones_pd_id"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="2019-06-11 17:03:03" author="Katsiaryna Balkunets">
+        <preConditions>
+            <not>
+                <tableExists tableName="emails"/>
+            </not>
+        </preConditions>
+        <createTable tableName="emails">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_emails"/>
+            </column>
+            <column name="email" type="VARCHAR2(255)"/>
+            <column name="is_primary" type="BOOLEAN"/>
+            <column name="personal_data_id" type="BIGINT"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="emails"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="2019-06-11 17:05:05" author="Katsiaryna Balkunets">
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists foreignKeyTableName="emails" foreignKeyName="fk_emails_pd_id"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="emails" baseColumnNames="personal_data_id"
+                                 constraintName="fk_emails_pd_id" referencedTableName="personal_data"
+                                 referencedColumnNames="id"/>
+        <rollback>
+            <dropForeignKeyConstraint baseTableName="emails" constraintName="fk_emails_pd_id"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="2019-06-11 17:07:07" author="Katsiaryna Balkunets">
+        <preConditions>
+            <not>
+                <tableExists tableName="identification_data"/>
+            </not>
+        </preConditions>
+        <createTable tableName="identification_data">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_identification_data"/>
+            </column>
+            <column name="number" type="VARCHAR2(255)"/>
+            <column name="issue_date" type="DATETIME"/>
+            <column name="issuing_authority" type="VARCHAR2(255)"/>
+            <column name="type" type="VARCHAR2(16)"/>
+            <column name="personal_data_id" type="BIGINT"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="identification_data"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="2019-06-11 17:08:08" author="Katsiaryna Balkunets">
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists foreignKeyTableName="identification_data" foreignKeyName="fk_ident_data_pd_id"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="identification_data" baseColumnNames="personal_data_id"
+                                 constraintName="fk_ident_data_pd_id" referencedTableName="personal_data"
+                                 referencedColumnNames="id"/>
+        <rollback>
+            <dropForeignKeyConstraint baseTableName="identification_data" constraintName="fk_ident_data_pd_id"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="2019-06-11 17:09:09" author="Katsiaryna Balkunets">
+        <preConditions>
+            <not>
+                <tableExists tableName="address"/>
+            </not>
+        </preConditions>
+        <createTable tableName="address">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_addresses"/>
+            </column>
+            <column name="country" type="VARCHAR2(64)"/>
+            <column name="region" type="VARCHAR2(64)"/>
+            <column name="area" type="VARCHAR2(64)"/>
+            <column name="city" type="VARCHAR2(64)"/>
+            <column name="street" type="VARCHAR2(64)"/>
+            <column name="house_number" type="INT"/>
+            <column name="flat_number" type="INT"/>
+            <column name="is_primary" type="BOOLEAN"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="address"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="2019-06-11 17:21:21" author="Katsiaryna Balkunets">
+        <preConditions>
+            <not>
+                <tableExists tableName="personal_data_addresses"/>
+            </not>
+        </preConditions>
+        <createTable tableName="personal_data_addresses">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_addresses"/>
+            </column>
+            <column name="personal_data_id" type="BIGINT"/>
+            <column name="address_id" type="BIGINT"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="personal_data_addresses"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="2019-06-11 17:22:22" author="Katsiaryna Balkunets">
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists foreignKeyTableName="personal_data_addresses" foreignKeyName="fk_pd_addr_pd_id"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="personal_data_addresses" baseColumnNames="personal_data_id"
+                                 constraintName="fk_pd_addr_pd_id" referencedTableName="personal_data"
+                                 referencedColumnNames="id"/>
+        <rollback>
+            <dropForeignKeyConstraint baseTableName="personal_data_addresses" constraintName="fk_pd_addr_pd_id"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="2019-06-11 17:23:23" author="Katsiaryna Balkunets">
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists foreignKeyTableName="personal_data_addresses" foreignKeyName="fk_pd_addr_addr_id"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="personal_data_addresses" baseColumnNames="address_id"
+                                 constraintName="fk_pd_addr_addr_id" referencedTableName="address"
+                                 referencedColumnNames="id"/>
+        <rollback>
+            <dropForeignKeyConstraint baseTableName="personal_data_addresses" constraintName="fk_pd_addr_addr_id"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
