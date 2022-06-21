@@ -20,7 +20,7 @@
     </modules>
 
     <properties>
-        <mysql.version>8.0.12</mysql.version>
+        <mysql.version>8.0.28</mysql.version>
         <spring.version>5.1.6.RELEASE</spring.version>
         <jpa.version>2.2</jpa.version>
         <lombok.version>1.18.8</lombok.version>
