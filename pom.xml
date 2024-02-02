@@ -21,7 +21,7 @@
 
     <properties>
         <mysql.version>8.0.12</mysql.version>
-        <spring.version>5.1.6.RELEASE</spring.version>
+        <spring.version>5.2.22.RELEASE</spring.version>
         <jpa.version>2.2</jpa.version>
         <lombok.version>1.18.8</lombok.version>
         <hibernate.version>5.2.17.Final</hibernate.version>
